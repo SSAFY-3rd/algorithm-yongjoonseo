@@ -54,7 +54,8 @@ def sand(y, x, direc, amount):
     # a = dy, dx + 1칸
     # direc & 1 => dx가 0
     p = [0.01, 0.01, 0.07, 0.07, 0.02, 0.02, 0.1, 0.1, 0.05, 0]
-    res = [0 for _ in range(len(p))]
+    # res = [0 for _ in range(len(p))]
+    res = 0
 
     for i in range(len(p)):
         temp_amount = int(p[i] * amount)
@@ -80,9 +81,11 @@ def sand(y, x, direc, amount):
         else:
             ny = y + dy[direc]
             nx = x + dx[direc]
-            temp_amount = amount - sum(res)
+            # temp_amount = amount - sum(res)
+            temp_amount = amount - res
         
-        res[i] = temp_amount
+        # res[i] = temp_amount
+        res += temp_amount
         if 0 <= ny < N and 0 <= nx < N:
             field[ny][nx] += temp_amount
         else:

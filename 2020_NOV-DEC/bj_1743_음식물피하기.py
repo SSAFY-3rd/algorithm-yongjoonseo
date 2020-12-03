@@ -2,7 +2,7 @@
 
 # BFS, DFS 등으로 갱신해가면서 가장 큰 음식물 크기 저장 후 출력
 
-# from collections import deque
+from collections import deque
 
 
 def BFS(r, c):
