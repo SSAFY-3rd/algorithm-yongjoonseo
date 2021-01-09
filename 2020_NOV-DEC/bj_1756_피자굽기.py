@@ -65,8 +65,54 @@
 # 큰 것 작은 것 큰 것 순으로 들어갔을 때도 연산이 많이 된다.
 
 # before - 이전에 나온 피자 크기중 가장 큰 것
-import sys
-input = sys.stdin.readline
+
+# def solution(D, N):
+#     oven = list(map(int, input().split()))
+#     where = dict()
+
+#     for i in range(len(oven)):
+#         if not where.get(oven[i]):
+#             where[oven[i]] = i+1
+    
+#     pizza = list(map(int, input().split()))
+#     before = pizza[0]
+
+#     if before == 1: D -= 1
+#     else:
+#         for j in range(1, pizza[0]):
+#             floor = where.get(j)
+#             if floor: D = floor - 2
+#             else: D -= 1
+    
+#     for i in range(1, len(pizza)):
+#         if D <= 0: 
+#             print(0)
+#             break
+#         if pizza[i] <= before:
+#             D -= 1
+#             continue
+#         min_d = D
+#         for j in range(before, pizza[i]):
+#             floor = where.get(j)
+#             if floor: 
+#                 if min_d > floor:
+#                     min_d = floor
+#                     if before < pizza[i]: before = pizza[i]
+#         if min_d <= D:
+#             D = min_d - 2
+#         else: D -= 1
+#     else:
+#         print(D+1)
+
+# if __name__ == '__main__':
+#     solution(*map(int, input().split()))
+
+# 숫자가 10억 이하이므로 시간초과난다.
+
+# --------------------------------------------------
+
+# 피자의 지름을 전부 탐색하는 게 아니라
+# 존재하는 오븐의 지름만 모두 탐색하도록 바꿔본다.
 
 def solution(D, N):
     oven = list(map(int, input().split()))
@@ -78,13 +124,19 @@ def solution(D, N):
     
     pizza = list(map(int, input().split()))
     before = pizza[0]
+    keys = sorted(list(where.keys()))
+    idx = 0
 
     if before == 1: D -= 1
     else:
-        for j in range(1, pizza[0]):
-            floor = where.get(j)
-            if floor: D = floor - 2
-            else: D -= 1
+        floor = float('inf')
+        for i in range(len(keys)):
+            if keys[i] >= before: 
+                idx = i
+                break
+            floor = min(floor, where.get(keys[i]))
+        if floor != float('inf'): D = floor - 2
+        else: D -= 1
     
     for i in range(1, len(pizza)):
         if D <= 0: 
@@ -93,15 +145,14 @@ def solution(D, N):
         if pizza[i] <= before:
             D -= 1
             continue
-        min_d = D
-        for j in range(before, pizza[i]):
-            floor = where.get(j)
-            if floor: 
-                if min_d > floor:
-                    min_d = floor
-                    if before < pizza[i]: before = pizza[i]
-        if min_d <= D:
-            D = min_d - 2
+        floor = float('inf')
+        for j in range(idx, len(keys)):
+            if keys[j] >= pizza[i]:
+                idx = j
+                before = pizza[i]
+                break
+            floor = min(floor, where.get(keys[j]))
+        if floor != float('inf') and floor <= D: D = floor - 2
         else: D -= 1
     else:
         print(D+1)
